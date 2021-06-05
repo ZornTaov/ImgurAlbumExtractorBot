@@ -144,10 +144,6 @@ namespace ImgurAlbumExtractor
                         }
                     }
                 }
-                else
-                {
-                    Methods.sendMessage(msg.chat.id, "no gallery link");
-                }
             }
         }
         public void PostInit()
