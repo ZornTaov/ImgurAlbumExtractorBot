@@ -1,0 +1,64 @@
+//The ID for the image
+public string id;
+//The title of the image.
+public string title;
+//Description of the image.
+public string description;
+//Time inserted into the gallery, epoch time
+public integer datetime;
+//Image MIME type.
+public string type;
+//is the image animated
+public boolean animated;
+//The width of the image in pixels
+public integer width;
+//The height of the image in pixels
+public integer height;
+//The size of the image in bytes
+public integer size;
+//The number of image views
+public integer views;
+//Bandwidth consumed by the image in bytes
+public integer bandwidth;
+//OPTIONAL, the deletehash, if you're logged in as the image owner
+public string deletehash;
+//The direct link to the the image. (Note: if fetching an animated GIF that was over 20MB in original size, a .gif thumbnail will be returned)
+public string link;
+//OPTIONAL, The .gifv link. Only available if the image is animated and type is 'image/gif'.
+public string gifv;
+//OPTIONAL, The direct link to the .mp4. Only available if the image is animated and type is 'image/gif'.
+public string mp4;
+//OPTIONAL, The Content-Length of the .mp4. Only available if the image is animated and type is 'image/gif'. Note that a zero value (0) is possible if the video has not yet been generated
+public integer mp4_size;
+//OPTIONAL, Whether the image has a looping animation. Only available if the image is animated and type is 'image/gif'.
+public boolean looping;
+//The current user's vote on the album. null if not signed in or if the user hasn't voted on it.
+public string vote;
+//Indicates if the current user favorited the image. Defaults to false if not signed in.
+public boolean favorite;
+//Indicates if the image has been marked as nsfw or not. Defaults to null if information is not available.
+public boolean nsfw;
+//Number of comments on the gallery image.
+public int comment_count;
+//Topic of the gallery image.
+public string topic;
+//Topic ID of the gallery image.
+public integer topic_id;
+//If the image has been categorized by our backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc)
+public string section;
+//The username of the account that uploaded it, or null.
+public string account_url;
+//The account ID of the account that uploaded it, or null.
+public integer account_id;
+//Upvotes for the image
+public integer ups;
+//Number of downvotes for the image
+public integer downs;
+//Upvotes minus downvotes
+public integer points;
+//Imgur popularity score
+public integer score;
+//If it's an album or not
+public boolean is_album;
+//Indicates if the image is in the most viral gallery or not.
+public boolean in_most_viral;
