@@ -63,7 +63,7 @@ namespace ImgurAlbumExtractor
                 client.DefaultRequestHeaders.Add("Authorization", "Client-ID " + "b265968728f82eb");
                 var response = Task.Run(() => client.GetAsync(uriMethod)).Result;
                 client.Dispose();
-                Logger.LogInfo("Got Response from API");
+                Logger.LogInfo("Got Response from API for link: " + m.Value);
                 Stream stream = Task.Run(() => response.Content.ReadAsStreamAsync()).Result;
                 ExtractAlbum(msg, stream);
             }
@@ -79,7 +79,7 @@ namespace ImgurAlbumExtractor
                 {
                     Methods.sendMessage(msg.chat.id, "SUCCESS: found " + result.data.Length + "images! Give me a moment to send them all!");
                     Methods.sendChatAction(msg.chat.id, "typing");
-                    Logger.LogInfo("SUCCESS: found " + result.data.Length + "images");
+                    Logger.LogInfo("SUCCESS: found " + result.data.Length + " images.");
                     int count = result.data.Length;
                     int pos = 0;
                     while (count > 0)
