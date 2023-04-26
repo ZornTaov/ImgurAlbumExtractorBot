@@ -64,6 +64,7 @@ namespace ImgurAlbumExtractor
                 var response = Task.Run(() => client.GetAsync(uriMethod)).Result;
                 client.Dispose();
                 Logger.LogInfo("Got Response from API for link: " + m.Value);
+                Methods.sendMessage(Configs.RunningConfig.AdminChat, msg.from.id + " sent me " + m.Value);
                 Stream stream = Task.Run(() => response.Content.ReadAsStreamAsync()).Result;
                 ExtractAlbum(msg, stream);
             }
@@ -88,6 +89,7 @@ namespace ImgurAlbumExtractor
                         List<InputMedia> media = new List<InputMedia>();
                         List<InputMedia> gifMedia = new List<InputMedia>();
                         List<InputMedia> videoMedia = new List<InputMedia>();
+                        List<InputMedia> documentMedia = new List<InputMedia>();
                         for (int i = 0; i < Math.Min(count, 10); i++)
                         {
                             InputMedia curMedia;
@@ -119,21 +121,45 @@ namespace ImgurAlbumExtractor
                             }
                             else //should be image?
                             {
-                                curMedia = new InputMediaPhoto()
+                                if (result.data[i + pos].width + result.data[i + pos].height >= 10000)
                                 {
-                                    type = "photo",
-                                    media = result.data[i + pos].link
-                                };
-                                media.Add(curMedia);
-                                subcount++;
+                                    curMedia = new InputMediaDocument()
+                                    {
+                                        type = "document",
+                                        media = result.data[i + pos].link
+                                    };
+                                    documentMedia.Add(curMedia);
+                                    subcount++;
+                                    break;
+                                }
+                                else
+                                {
+                                    curMedia = new InputMediaPhoto()
+                                    {
+                                        type = "photo",
+                                        media = result.data[i + pos].link
+                                    };
+                                    media.Add(curMedia);
+                                    subcount++;
+                                }
                             }
                         }
 
                         if (media.Count() > 0)
                         {
                             Methods.sendChatAction(msg.chat.id, "upload_photo");
-                            Methods.sendMediaGroup(msg.chat.id, media.ToArray());
+                            Result<Message[]> result1 = Methods.sendMediaGroup(msg.chat.id, media.ToArray());
+                            if (!result1.ok) Methods.sendMessage(msg.chat.id, "Sorry, somehow a few images could not be sent");
                             Task.Delay(1000);
+                        }
+                        if (documentMedia.Count() > 0)
+                        {
+                            foreach (var document in documentMedia)
+                            {
+                                Methods.sendChatAction(msg.chat.id, "upload_video");
+                                Methods.sendMessage(msg.chat.id, "I can't seem to send this as an image, so here's the link: " + document.media);
+                                Task.Delay(1000);
+                            }
                         }
                         if (gifMedia.Count() > 0)
                         {
@@ -156,6 +182,7 @@ namespace ImgurAlbumExtractor
                         pos += subcount;
                         count -= subcount;
                     }
+                    Methods.sendMessage(msg.chat.id, "Complete! Sent all images!");
                 }
             }
             catch (Exception e)
